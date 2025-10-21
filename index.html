@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8" />
-  <title>Sleep Disorder Classifier — CSV → TF.js</title>
+  <title>Sleep Disorder Classifier — TF.js</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
     :root{--bg:#f8fafc;--muted:#64748b}
@@ -19,20 +19,21 @@
     table{width:100%;border-collapse:collapse}
     th,td{border-top:1px solid #eee;padding:8px;text-align:left}
     canvas{border:1px solid #e5e7eb;border-radius:8px;background:#fff}
-    #log{white-space:pre-wrap;background:#0f172a;color:#e5e7eb;font-family:ui-monospace,Consolas,monospace;padding:10px;border-radius:8px;max-height:220px;overflow:auto}
+    #log{white-space:pre-wrap;background:#0f172a;color:#e5e7eb;font-family:ui-monospace,Consolas,monospace;padding:10px;border-radius:8px;max-height:240px;overflow:auto}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
     .pill{display:inline-block;background:#ecfccb;border:1px solid #d9f99d;color:#166534;border-radius:999px;padding:2px 8px;font-size:12px}
     .small{font-size:12px}
     .two-col{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px}
   </style>
-  <!-- libs -->
+
+  <!-- Библиотеки: сначала tfjs, потом наши модули -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.20.0/dist/tf.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
-  <h1>Sleep Disorder Classifier — CSV → TF.js</h1>
-  <div class="muted small">Обучение модели в браузере. <b>Дисклеймер:</b> результат — демонстрационный и не является медицинским заключением.</div>
+  <h1>Sleep Disorder Classifier — TF.js</h1>
+  <div class="muted small">Демо. Не является мед. заключением. Repo path: <span id="base"></span></div>
 
   <div class="card">
     <div class="row">
@@ -40,7 +41,7 @@
       <div class="col">
         <h3>1) Данные</h3>
         <button id="btnLoadEmbedded">Загрузить встроенный CSV</button>
-        <div class="small muted">./data/Sleep_health_and_lifestyle_dataset.csv</div>
+        <div class="small muted">Ожидается: <code>./data/Sleep_health_and_lifestyle_dataset.csv</code></div>
         <div style="margin-top:6px">или загрузите свой файл:</div>
         <input type="file" id="csv" accept=".csv,text/csv" />
         <div class="grid" style="margin-top:10px">
@@ -91,7 +92,7 @@
           &nbsp;
           <label>LR</label> <input type="number" id="lr" value="0.001" step="0.0005" />
           &nbsp;
-          <label>Порог (prob→label)</label> <input type="number" id="thr" value="0.5" step="0.05" min="0.05" max="0.95" />
+          <label>Порог</label> <input type="number" id="thr" value="0.5" step="0.05" min="0.05" max="0.95" />
         </div>
         <div style="margin-top:8px">
           <button id="btnBuild" disabled>Собрать модель</button>
@@ -137,6 +138,7 @@
   </div>
 
   <script>
+    document.getElementById('base').textContent = location.pathname;
     window.addEventListener('error', e=>{
       const log=document.getElementById('log'); if(log) log.textContent += "❌ " + (e.message||e) + "\n";
     });
@@ -145,8 +147,9 @@
     });
   </script>
 
-  <script type="module" src="./data_utils.js?v=2"></script>
+  <!-- НАШИ МОДУЛИ: именно type="module" и после tf.min.js -->
+  <script type="module" src="./data_utils.js?v=3"></script>
   <script type="module" src="./model.js?v=1"></script>
-  <script type="module" src="./app.js?v=2"></script>
+  <script type="module" src="./app.js?v=3"></script>
 </body>
 </html>
